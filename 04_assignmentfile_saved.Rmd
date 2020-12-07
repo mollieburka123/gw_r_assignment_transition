@@ -36,7 +36,15 @@ Below write code to show the new names added to the agency review team lists sin
 
 ```{r, echo=FALSE}
 
-newnames <- anti_join(transition_data_current, transition_data_previous, by = "idstring")
+newnames %>% 
+  gt() %>%
+  tab_header(
+    title = "New Agency Names Review Team"
+  )%>%
+  cols_label(name="Name", agency = "agency", on_multiple_teams = "on multiple teams", most_recent_employment= "most recent employment", source_of_funding = "source of funding") %>%
+  cols_hide(columns = vars(team_lead, idstring, namestring))
+
+
 
 ```
 
@@ -48,16 +56,12 @@ Add data to show the total number of people appointed to each agency team, along
 
 ```{r, echo=FALSE}
 
-agencycount_compare <- left_join(agencycount_current, agencycount_previous, by = "agency")
-agencycount_compare
+agencycount_compare%>%
+  filter(change > 0) %>%
+  gt() %>%
+  tab_header(title = "total people appointed in each agency and change from previous count") %>%
+  cols_label(agency = "agency", current_count = "current count", previous_count = "previous count", change = "change")
 
-agencycount_compare <- agencycount_compare %>% 
-  mutate(
-    change = current_count - previous_count
-  )
-
-agencycount_compare <- agencycount_compare %>% 
-  filter(change > 0)
 
 
 ```
@@ -70,9 +74,14 @@ Show the top 10 **largest** agency review teams as of today:
 
 ```{r, echo=FALSE}
 
-agencycount_compare <- agencycount_compare %>% 
-  arrange(current_count)
-  top_n(10)
+agencycount_current %>%
+  arrange(desc(current_count)) %>%
+  filter(current_count > 22) %>%
+  gt() %>%
+  tab_header(title = "10 largest agency review teams") %>%
+  cols_label(agency = "agency", current_count = "current count")
+
+
 
 ```
 
@@ -80,9 +89,11 @@ Show the top **smallest** agency review teams as of today - which we'll define h
 
 ```{r, echo=FALSE}
 
-agencycount_compare <- agencycount_compare %>% 
-  arrange(desc(current_count)
-  top_n(5)
+agencycount_current %>%
+  filter(current_count < 5) %>%
+  gt() %>%
+  tab_header(title = "smallest agency review teams") %>%
+  cols_label(agency = "agency", current_count = "current count")
 
 ```
 
@@ -106,15 +117,7 @@ newstaffnames %>%
   gt() %>%
   tab_header (title = "New Seinor Staff Names") %>%
   cols_label(name = "name", title = "title") %>%
-  cols_hide(columns = cars (link, idstring))
-
-OR
-
-seniorstaffnames <- readRDS("processed_data/transition_data_scraped.rds")
-
-transition_data_previous <- readRDS("archived_data/transition_data_archived_2020_11_24t09_52.rds")
-
-newseniorstaff <- anti_join(seniorstaffnames, transition_data_archived_2020_11_24t09_52)
+  cols_hide(columns = vars (link, idstring))
 
 ```
 
@@ -125,8 +128,32 @@ Add code to show the total number of people currently named to the WH senior sta
   
 
 ```{r, echo=FALSE}
+nrow(staff_data_current)
+nrow(staff_data_previous)
 
 
+staff_data_current
+
+staffcount_current <- staff_data_current %>%
+  tally(n= "number of people in WH Senior Staff")
+
+staffcount_current
+
+staffcount_previous <- staff_data_previous %>%
+  tally (n= "number of people previously WH senior staff")
+
+
+staffcount_previous
+
+staffcountcompare <- merge(staffcount_current, staffcount_previous, all= TRUE)
+staffcountcompare
+
+staffcountcompare %>%
+  gt() %>%
+  tab_header(
+    title = "total current WH senior staff vs. previous WH Senior Staff"
+
+  )
 
 
 ```
