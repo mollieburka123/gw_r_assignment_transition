@@ -1,3 +1,6 @@
+##Mollie Wormser
+
+
 library(tidyverse)
 library(janitor)
 library(readxl)
@@ -6,7 +9,6 @@ library(writexl)
 #to run new scrape(s) from the live Biden site currently:
 source("01_scrape_agencyteams.R")
 source("02_scrape_nominees.R")
-
 
 
 #### WHITE HOUSE SENIOR STAFF ##### --------------------------------------------------------
@@ -53,15 +55,7 @@ title_count_previous <- staff_data_archived_2020_11_24t14_00 %>%
 
 title_count_compare <- left_join(title_count_current, title_count_previous, by = "title")
 
-
-
-
-#names of new agency review team members
-saveRDS(newnames, "processed_data/newnames.rds")
-#aggregate county of agency totals compared
-saveRDS(agencycount_compare, "processed_data/agencycount_compare.rds")
-#entire combined agency teams file
-saveRDS(agencyteams, "processed_data/agencyteams.rds")
+#done
 
 
 
