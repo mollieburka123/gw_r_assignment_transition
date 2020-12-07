@@ -1,7 +1,7 @@
 ---
 title: "GW Assignment - Biden Transition"
-author: "YOUR NAME HERE"
-date: "`r format(Sys.time(), '%B %d, %Y')`"
+author: Mollie Wormser
+date: December 6, 2020
 output: html_document
 ---
 
@@ -95,13 +95,26 @@ Come up with the necessary R code to return the following for the WH senior staf
 ### *New Names*
 
 Below write code to show the new names added to the senior staff lists since the prior data provided.  
-  
+
 
 ```{r, echo=FALSE}
 
+source("01_scrape_agencyteams.R")
+source("02_scrape_nominees.R")
 
+newstaffnames %>%
+  gt() %>%
+  tab_header (title = "New Seinor Staff Names") %>%
+  cols_label(name = "name", title = "title") %>%
+  cols_hide(columns = cars (link, idstring))
 
- 
+OR
+
+seniorstaffnames <- readRDS("processed_data/transition_data_scraped.rds")
+
+transition_data_previous <- readRDS("archived_data/transition_data_archived_2020_11_24t09_52.rds")
+
+newseniorstaff <- anti_join(seniorstaffnames, transition_data_archived_2020_11_24t09_52)
 
 ```
 
@@ -112,7 +125,6 @@ Add code to show the total number of people currently named to the WH senior sta
   
 
 ```{r, echo=FALSE}
-
 
 
 
