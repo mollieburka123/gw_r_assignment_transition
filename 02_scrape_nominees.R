@@ -20,7 +20,7 @@ scrape_names_staff <- function(namenum) {
   name1 <- print(html_text(names, trim = TRUE)[[namenum]])
   
   #grab the titles
-  titles <- html_nodes(content(website1), "h4")
+  titles <- html_nodes(content(website1), "span.acctext--con")
   #show just one
   title1 <- print(html_text(titles, trim = TRUE)[[namenum]])
   
